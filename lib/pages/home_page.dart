@@ -50,8 +50,8 @@ class _HomePageState extends State<HomePage> {
 
 
   // go to workout page
-  void goToWorkoutPage(){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const WorkoutPage()));
+  void goToWorkoutPage(String workoutName){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => WorkoutPage(workoutName: workoutName)));
   }
 
 
@@ -66,12 +66,18 @@ class _HomePageState extends State<HomePage> {
           ),
           body: ListView.builder(
             itemCount: value.getWorkoutList().length,
-            itemBuilder: (context,index) => ListTile(
-               title: Text(value.getWorkoutList()[index].name),
-               trailing: IconButton(  
-                icon: const Icon(Icons.arrow_forward_ios),
-                onPressed: goToWorkoutPage,
-               ),
+            itemBuilder: (context,index) => Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: Container(
+                color: Colors.grey[200],
+                child: ListTile(
+                   title: Text(value.getWorkoutList()[index].name),
+                   trailing: IconButton(  
+                    icon: const Icon(Icons.arrow_forward_ios),
+                    onPressed: () => goToWorkoutPage(value.getWorkoutList()[index].name),
+                   ),
+                ),
+              ),
             ),
             
           ),
