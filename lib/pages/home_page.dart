@@ -12,6 +12,16 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  // when the app run for the first ever time
+  @override
+  void initState() {
+    Provider.of<WorkoutData>(context,listen: false).initWorkoutList();
+
+    super.initState();
+  }
+
+
+  // text controller for workoutname
   final workoutFieldController = TextEditingController();
 
   //create new workout
