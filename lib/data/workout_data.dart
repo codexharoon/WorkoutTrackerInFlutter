@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:workout_tracker/data/hive_databse.dart';
 import 'package:workout_tracker/models/exercise.dart';
 import 'package:workout_tracker/models/workout.dart';
+import 'package:flutter/foundation.dart';
 
 class WorkoutData extends ChangeNotifier{
 

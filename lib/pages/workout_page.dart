@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:workout_tracker/data/workout_data.dart';
+import 'package:workout_tracker/models/workout.dart';
 
 class WorkoutPage extends StatefulWidget {
 
@@ -81,6 +83,16 @@ class _WorkoutPageState extends State<WorkoutPage> {
     );
   }
 
+
+  // deleting a exercise in a workout
+  void deleteExerciseInWorkout(String exerciseName){
+    Workout workout = Provider.of<WorkoutData>(context,listen: false).getRelevantWorkout(widget.workoutName);
+
+    workout.exercises.removeWhere((element) => element.name == exerciseName);
+    // Provider.of<WorkoutData>(context,listen: false).db.saveData(Provider.of<WorkoutData>(context,listen: false).workoutList);
+    Provider.of<WorkoutData>(context, listen: false).notifyListeners();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<WorkoutData>(
@@ -96,18 +108,33 @@ class _WorkoutPageState extends State<WorkoutPage> {
             child: Container(
               padding: const EdgeInsets.all(16),
               color: Colors.grey[200],
-              child: ListTile(
-                title: Text(value.getRelevantWorkout(widget.workoutName).exercises[index].name),
-                subtitle: Row(  
+              child: Slidable(
+                endActionPane: ActionPane(  
+                  motion: const StretchMotion(),
                   children: [
-                    Chip(label: Text("${value.getRelevantWorkout(widget.workoutName).exercises[index].weight}KG")),
-                    Chip(label: Text("${value.getRelevantWorkout(widget.workoutName).exercises[index].reps} reps")),
-                    Chip(label: Text("${value.getRelevantWorkout(widget.workoutName).exercises[index].sets} setss")),
+
+                    SlidableAction(
+                      onPressed: (context) => deleteExerciseInWorkout(value.getRelevantWorkout(widget.workoutName).exercises[index].name),
+                      icon: Icons.delete,
+                      backgroundColor: Colors.red.shade400,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+
                   ],
                 ),
-                trailing: Checkbox(  
-                  value: value.getRelevantWorkout(widget.workoutName).exercises[index].isCompleted,
-                  onChanged: (val) => onCheckBoxChanged(value.getRelevantWorkout(widget.workoutName).name , value.getRelevantWorkout(widget.workoutName).exercises[index].name),
+                child: ListTile(
+                  title: Text(value.getRelevantWorkout(widget.workoutName).exercises[index].name),
+                  subtitle: Row(  
+                    children: [
+                      Chip(label: Text("${value.getRelevantWorkout(widget.workoutName).exercises[index].weight}KG")),
+                      Chip(label: Text("${value.getRelevantWorkout(widget.workoutName).exercises[index].reps} reps")),
+                      Chip(label: Text("${value.getRelevantWorkout(widget.workoutName).exercises[index].sets} setss")),
+                    ],
+                  ),
+                  trailing: Checkbox(  
+                    value: value.getRelevantWorkout(widget.workoutName).exercises[index].isCompleted,
+                    onChanged: (val) => onCheckBoxChanged(value.getRelevantWorkout(widget.workoutName).name , value.getRelevantWorkout(widget.workoutName).exercises[index].name),
+                  ),
                 ),
               ),
             ),
