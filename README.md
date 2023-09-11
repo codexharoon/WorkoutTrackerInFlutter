@@ -4,7 +4,7 @@
 ###### Create & Delete Workouts, add differents exercise to individual workouts.
 ###### HIVE for Local Storage.
 ###### Slidable for tile sliding delete button.
-###### Heat Map for better display of dailt track data.
+###### Heat Map for better display of daily track data.
 ###### SVG for custom svgs in APP.
 
 ### UI
