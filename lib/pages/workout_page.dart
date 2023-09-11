@@ -89,8 +89,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
     Workout workout = Provider.of<WorkoutData>(context,listen: false).getRelevantWorkout(widget.workoutName);
 
     workout.exercises.removeWhere((element) => element.name == exerciseName);
-    // Provider.of<WorkoutData>(context,listen: false).db.saveData(Provider.of<WorkoutData>(context,listen: false).workoutList);
-    Provider.of<WorkoutData>(context, listen: false).notifyListeners();
+    Provider.of<WorkoutData>(context, listen: false).runNotifyListner();
   }
 
   @override

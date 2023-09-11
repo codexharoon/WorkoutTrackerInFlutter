@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:workout_tracker/data/hive_databse.dart';
+import 'package:workout_tracker/datetime/date_time.dart';
 import 'package:workout_tracker/models/exercise.dart';
 import 'package:workout_tracker/models/workout.dart';
 import 'package:flutter/foundation.dart';
 
 class WorkoutData extends ChangeNotifier{
+
+
+  // for heatmap
+  final Map<DateTime,int> dataset = {};
 
   // instance of hive database
   final db = HiveDatabase();
@@ -29,6 +34,9 @@ class WorkoutData extends ChangeNotifier{
     else{
       db.saveData(workoutList);
     }
+
+    //load hetamap
+    loadHeatMap();
   }
 
   // get workout object by name
@@ -58,6 +66,11 @@ class WorkoutData extends ChangeNotifier{
     Workout relevantWorkout = getRelevantWorkout(workoutName);
 
     return relevantWorkout.exercises.length;
+  }
+
+  // notify listner
+  void runNotifyListner(){
+    notifyListeners();
   }
 
 
@@ -90,7 +103,53 @@ class WorkoutData extends ChangeNotifier{
 
     db.saveData(workoutList); 
 
+    loadHeatMap();
+
     notifyListeners();
+  }
+
+
+  // utility methods for heat map
+
+  // get startdate
+  String getStartDate(){
+    return db.getStartDate();
+  }
+
+  // load heat map
+  void loadHeatMap(){
+    // get strat date
+    DateTime startDate = convertStringIntoDateTime(getStartDate());
+
+    // count no. of days to load
+    int daysInBetween = DateTime.now().difference(startDate).inDays;
+
+    // go from start date to today, and add each completion status to the dataset
+
+    for(int i=0; i<daysInBetween +1; i++){
+
+      String yyyymmdd = convertDateTimeIntoString(startDate.add(Duration(days: i)));
+
+      // get
+
+      // completition status
+      int completionStatus = db.getCompletionStatus(yyyymmdd);
+
+      // year
+      int year = startDate.add(Duration(days: i)).year;
+      // month
+      int month = startDate.add(Duration(days: i)).month;
+      // day
+      int day = startDate.add(Duration(days: i)).day;
+
+
+      final percentForEachDay = <DateTime,int>{
+        DateTime(year,month,day) : completionStatus
+      };
+      
+      dataset.addEntries(percentForEachDay.entries);
+
+    }
   }
 
 
