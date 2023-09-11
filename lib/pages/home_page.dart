@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:workout_tracker/assets/my_icons.dart';
 import 'package:workout_tracker/data/workout_data.dart';
 import 'package:workout_tracker/datetime/date_time.dart';
 import 'package:workout_tracker/pages/heatmap.dart';
@@ -91,6 +93,7 @@ class _HomePageState extends State<HomePage> {
           appBar: AppBar(  
             title: const Text('Workout Tracker'),
             centerTitle: true,
+            elevation: 0,
           ),
           body: ListView(
             children: [
@@ -104,10 +107,13 @@ class _HomePageState extends State<HomePage> {
 
                 itemCount: value.getWorkoutList().length,
                 itemBuilder: (context,index) => Padding(
-                    padding: const EdgeInsets.only(top: 16),
+                    padding: const EdgeInsets.only(top: 16,right: 24,left: 24),
                     child: Container(
-                      padding: const EdgeInsets.all(8),
-                      color: Colors.grey[200],
+                      decoration: BoxDecoration(  
+                        color: Colors.grey[800],
+                        borderRadius: BorderRadius.circular(8)
+                      ),
+                      padding: const EdgeInsets.all(16),
                       child: Slidable(
                           endActionPane: ActionPane(  
                           motion: const StretchMotion(),
@@ -121,10 +127,18 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                         child: ListTile(
-                          title: Text(value.getWorkoutList()[index].name),
+                          leading: SvgPicture.asset(MyIcons.dumbbell,colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn)),
+                          title: Text(value.getWorkoutList()[index].name,
+                            style: const TextStyle(  
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                           ),
                           trailing: IconButton(  
                             icon: const Icon(Icons.arrow_forward_ios),
                             onPressed: () => goToWorkoutPage(value.getWorkoutList()[index].name),
+                            color: Colors.white,
                           ),
                         ),
                       ),

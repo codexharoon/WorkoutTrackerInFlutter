@@ -103,10 +103,13 @@ class _WorkoutPageState extends State<WorkoutPage> {
         body: ListView.builder(
           itemCount: value.getLengthOfExercisesInWorkout(widget.workoutName),
           itemBuilder: (context,index) => Padding(
-            padding: const EdgeInsets.only(top: 16),
+            padding: const EdgeInsets.only(top: 16,right: 16,left: 16),
             child: Container(
+              decoration: BoxDecoration(  
+                color: value.getRelevantWorkout(widget.workoutName).exercises[index].isCompleted ? Colors.green : Colors.grey[200],
+                borderRadius: BorderRadius.circular(8),
+              ),
               padding: const EdgeInsets.all(16),
-              color: Colors.grey[200],
               child: Slidable(
                 endActionPane: ActionPane(  
                   motion: const StretchMotion(),
@@ -122,8 +125,15 @@ class _WorkoutPageState extends State<WorkoutPage> {
                   ],
                 ),
                 child: ListTile(
-                  title: Text(value.getRelevantWorkout(widget.workoutName).exercises[index].name),
+                  title: Text(value.getRelevantWorkout(widget.workoutName).exercises[index].name,
+                    style: TextStyle(  
+                      color: value.getRelevantWorkout(widget.workoutName).exercises[index].isCompleted ? Colors.white : Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
                   subtitle: Row(  
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Chip(label: Text("${value.getRelevantWorkout(widget.workoutName).exercises[index].weight}KG")),
                       Chip(label: Text("${value.getRelevantWorkout(widget.workoutName).exercises[index].reps} reps")),
@@ -133,6 +143,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
                   trailing: Checkbox(  
                     value: value.getRelevantWorkout(widget.workoutName).exercises[index].isCompleted,
                     onChanged: (val) => onCheckBoxChanged(value.getRelevantWorkout(widget.workoutName).name , value.getRelevantWorkout(widget.workoutName).exercises[index].name),
+                    activeColor: Colors.green[800],
                   ),
                 ),
               ),
